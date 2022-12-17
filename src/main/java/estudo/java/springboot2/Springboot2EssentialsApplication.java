@@ -15,7 +15,7 @@ public class Springboot2EssentialsApplication {
 
 }
 /*
-Anotações basicas para a geração de servico spring:
+Anotações basicas para a geração do serviço spring:
 
 @EnableAutoConfiguration
 @ComponentScan
