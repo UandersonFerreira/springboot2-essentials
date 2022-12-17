@@ -37,6 +37,7 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.findByName(name));
     }
 
+
     @PostMapping
     // @ResponseStatus(HttpStatus.CREATED) // Outra forma de retorna o CODIGO de um resposta
     public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody){
