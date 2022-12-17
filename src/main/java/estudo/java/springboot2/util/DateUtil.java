@@ -2,7 +2,6 @@ package estudo.java.springboot2.util;
 
 import org.springframework.stereotype.Component;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

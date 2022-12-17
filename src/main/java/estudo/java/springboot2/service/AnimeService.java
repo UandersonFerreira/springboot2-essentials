@@ -1,27 +1,61 @@
 package estudo.java.springboot2.service;
 
 import estudo.java.springboot2.domain.Anime;
+import estudo.java.springboot2.mapper.AnimeMapper;
 import estudo.java.springboot2.repository.AnimeRepository;
-import org.springframework.stereotype.Repository;
+import estudo.java.springboot2.requests.AnimePostRequestBody;
+import estudo.java.springboot2.requests.AnimePutRequestBody;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AnimeService {
-   // private final AnimeRepository animeRepository;
+    private final AnimeRepository animeRepository;
     public List<Anime> listAll(){
-        return List.of(
-                new Anime(1L,"Naruto Shippuden"),
-                new Anime(2L,"Overlord")
-        );
+        return animeRepository.findAll();
+    }
+    public List<Anime> findByName(String name){
+        return animeRepository.findByName(name);
+    }
+    public Anime findByIdOrThrowBadRequestException(long id){
+        return animeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
     }
 
-}
+    public Anime save(AnimePostRequestBody animePostRequestBody) {
+         Anime anime = AnimeMapper.INSTANCE.toAnime(animePostRequestBody);
+        return animeRepository.save(anime);
+    }
+
+    public void delete(long id) {
+        animeRepository.delete(findByIdOrThrowBadRequestException(id));
+    }
+
+    public void replace(AnimePutRequestBody animePutRequestBody) {
+        final Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
+        final Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        anime.setId(savedAnime.getId());
+        animeRepository.save(anime);
+    }
+
+}//class
 
 /*
 - Class reponsavel pela impletação
 da regra de negócio da aplicação!
+
+OBS:
+- Não é recomendado mostrar toda a stack de erro no front, portanto basta configurar
+o arquivo application.properties/yml do spring para que não seja exibido.
+ex:
+server:
+  error:
+    include-stacktrace: on_param
 
 
  -O @Bean  serve para exportar uma classe(Criar uma Intância) para o Spring, para
