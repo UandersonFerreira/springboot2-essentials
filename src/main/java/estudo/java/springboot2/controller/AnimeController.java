@@ -33,8 +33,9 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
     }
     @GetMapping(path = "/find")
-    public ResponseEntity< List<Anime> > findByName(@RequestParam String name){
+    public ResponseEntity< List<Anime> > findByName(@RequestParam String name){//(@RequestParam(name = "name") String name) Não é mais obrigatório declarar o nome do campo que sera acessado na url, pois o spring pega de acordo com o nome da váriavel do parametro.
         return ResponseEntity.ok(animeService.findByName(name));
+        //http://localhost:8080/animes/find?name=naruto
     }
 
 
@@ -65,8 +66,12 @@ public class AnimeController {
 Criação dos EndPoints da aplicação.
 Recursos que serão acessados /anime/save, /anime/delete..
 
+- path verbos que aceitam mais de um tipo de parametro no spring gera ambiguidade.
+ex: /animes/1
+    /animes/naruto shippuden
 
-Boaa Práticas:
+
+Boas Práticas:
 - Sempre retornar algo a mais do que só o esperado
 ex:
     @GetMapping(path = "/{id}")
@@ -87,6 +92,7 @@ OBS: o method delete, pode ser não-idepontente
 ex; caso ele esteja alterando sempre a ultima posição de
 uma lista ele estara alterando o estado do servidor.
 
+-> link @RequestParam: https://www.baeldung.com/spring-request-param
 
 - O "Hypertext Transfer Protocol (HTTP) Method Registry" foi
 preenchido com os registros abaixo:

@@ -1,6 +1,7 @@
 package estudo.java.springboot2.service;
 
 import estudo.java.springboot2.domain.Anime;
+import estudo.java.springboot2.exception.BadRequestException;
 import estudo.java.springboot2.mapper.AnimeMapper;
 import estudo.java.springboot2.repository.AnimeRepository;
 import estudo.java.springboot2.requests.AnimePostRequestBody;
@@ -8,10 +9,11 @@ import estudo.java.springboot2.requests.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+//- Class reponsavel pela impletação da regra de negócio da aplicação!
 @Service
 @RequiredArgsConstructor
 public class AnimeService {
@@ -22,15 +24,21 @@ public class AnimeService {
     public List<Anime> findByName(String name){
         return animeRepository.findByName(name);
     }
-    public Anime findByIdOrThrowBadRequestException(long id){
+    public Anime findByIdOrThrowBadRequestException(long id) {
         return animeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+                .orElseThrow(() -> new BadRequestException("Anime not found"));//exception customizada
     }
+//        public Anime findByIdOrThrowBadRequestException(long id){
+//        return animeRepository.findById(id)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+//    }
 
+    @Transactional(rollbackFor = Exception.class)
     public Anime save(AnimePostRequestBody animePostRequestBody) {
          Anime anime = AnimeMapper.INSTANCE.toAnime(animePostRequestBody);
         return animeRepository.save(anime);
     }
+
 
     public void delete(long id) {
         animeRepository.delete(findByIdOrThrowBadRequestException(id));
@@ -46,8 +54,22 @@ public class AnimeService {
 }//class
 
 /*
-- Class reponsavel pela impletação
-da regra de negócio da aplicação!
+-Uma transação garante que todo processo deva ser executado com êxito, é “tudo ou nada” (princípio da atomicidade).
+
+@Transactional: Garante que se ocorre um erro durante a execução de uma
+transaçã a mesma será cancelada, totalmente, não persistindo no banco de dados.
+
+@Transactional(rollbackFor = Exception.class): Anotação para captar
+exceções checadas
+
+É recomenda-se sempre usar a anotação, quando temos methods que fazer alguma persistência
+no banco de dados, afim de, garantir o principio da atomicidade.
+
+ - begin(): Inicia uma transação;
+ - commit(): Finaliza uma transação;
+ - rollback(): Cancela uma transação.
+
+ Link: https://www.devmedia.com.br/conheca-o-spring-transactional-annotations/32472
 
 OBS:
 - Não é recomendado mostrar toda a stack de erro no front, portanto basta configurar
@@ -65,7 +87,6 @@ server:
 Geralmente quando precisamos criar uma classe que o Spring
 vai gerenciar, basta criar a classe e anota-la com alguma
 anotação do Spring( @controller, @service, @Repository, etc.).
-
 fonte:https://cursos.alura.com.br/forum/topico-duvida-sobre-o-bean-113349
 
 
