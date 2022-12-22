@@ -5,6 +5,7 @@ import estudo.java.springboot2.requests.AnimePostRequestBody;
 import estudo.java.springboot2.requests.AnimePutRequestBody;
 import estudo.java.springboot2.service.AnimeService;
 import estudo.java.springboot2.util.DateUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class AnimeController {
 
     @PostMapping
     // @ResponseStatus(HttpStatus.CREATED) // Outra forma de retorna o CODIGO de um resposta
-    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody){
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody){
         return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
     }
 

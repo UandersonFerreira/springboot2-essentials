@@ -1,18 +1,20 @@
 package estudo.java.springboot2.exception;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @SuperBuilder
-public class BadRequestExceptionDetails extends ExceptionDetails {
+public class ExceptionDetails {
+    protected String title;
+    protected int status;
+    protected String details;
+    protected String developerMessage;
+    protected LocalDateTime timestamp;
 
 }
-
 /*
 handler Global -  Manipulação/Tratamento global
 
