@@ -10,5 +10,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+
+#appender log-pack - por hibernate ficar padrão com o spring(influência na melhora da performance)
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
 
