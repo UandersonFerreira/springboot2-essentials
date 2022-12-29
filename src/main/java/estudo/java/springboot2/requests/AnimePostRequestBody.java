@@ -1,9 +1,7 @@
 package estudo.java.springboot2.requests;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.validator.constraints.URL;
 
 //Classe funciona como um DTO
 @Data
@@ -28,7 +26,7 @@ Annotation       	Description
 @Size(min,max)   – Checks if the annotated element’s size is between min value and max value provided (inclusive).
 @Pattern - It determines that the sequence follows the specified regular expression. ( Expressão regular/Regex )
 @Email   – Checks whether the specified character sequence/string is a valid email address. ( Email válido )
-@NotBlank – Checks that the annotated character sequence/string is not null and the trimmed length is greater than 0.
+@NotBlank – Checks that the annotated character sequence/string is not null and the trimmed length is greater than 0. ( != null & length > 0 RECOMENDANDO)
 @NotEmpty – Checks that the annotated element is not null and not empty.
 @AssertFalse – Checks that the annotated element is false.
 @AssertTrue – Checks that the annotated element is true.
@@ -37,11 +35,20 @@ Annotation       	Description
 @Negative – Checks if the element is strictly smaller than 0. ( < 0 )
 @Positive – Checks if the element is strictly greater than 0. ( > 0 )
 @PositiveOrZero – Checks if the given element is greater than or equal to 0. ( >= 0 )
+EXISTE OUTRAS VALIDAÇÕES TAIS COMO:
+@CPF
+@CNPJ
+
 
 OBSERVAÇÃO:
 Para que de fato essas validações sejam executadas, precisamos utilizar a
 anotação @Valid que irá executar a validação de todas as anotações
-da nossa classe
+da nossa classe.
+EX:
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody){
+        return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
+    }
+
 
 link: https://www.geeksforgeeks.org/spring-mvc-validation/
 

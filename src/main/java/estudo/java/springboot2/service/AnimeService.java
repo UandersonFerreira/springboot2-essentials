@@ -9,10 +9,8 @@ import estudo.java.springboot2.requests.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 //- Class reponsavel pela impletação da regra de negócio da aplicação!
@@ -22,6 +20,9 @@ public class AnimeService {
     private final AnimeRepository animeRepository;
     public Page<Anime> listAll(Pageable pageable){
         return animeRepository.findAll(pageable);//Por animeRepository extender de JpaRepository, herda-se seus methods
+    }
+    public List<Anime>  listAllNoPageable() {
+        return animeRepository.findAll();
     }
     public List<Anime> findByName(String name){
         return animeRepository.findByName(name);
@@ -33,6 +34,7 @@ public class AnimeService {
 //        public Anime findByIdOrThrowBadRequestException(long id){
 //        return animeRepository.findById(id)
 //                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+
 //    }
 
     @Transactional
@@ -52,7 +54,6 @@ public class AnimeService {
         anime.setId(savedAnime.getId());
         animeRepository.save(anime);
     }
-
 }//class
 
 /*
