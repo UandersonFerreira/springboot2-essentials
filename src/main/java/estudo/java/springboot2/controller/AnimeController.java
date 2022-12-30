@@ -22,8 +22,8 @@ import java.util.List;
 //@AllArgsConstructor//cria um construtor com todos os atributos da class
 @RequiredArgsConstructor//cria um construtor com todos os atributos final da class
 public class AnimeController {
-    private DateUtil dateUtil;
-    private  AnimeService animeService;
+    private final DateUtil dateUtil;
+    private  final AnimeService animeService;
 
     @GetMapping()
     public ResponseEntity<Page<Anime>> list(Pageable pageable){
