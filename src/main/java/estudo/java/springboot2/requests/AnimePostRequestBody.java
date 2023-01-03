@@ -1,10 +1,12 @@
 package estudo.java.springboot2.requests;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 
 //Classe funciona como um DTO
 @Data
+@Builder
 public class AnimePostRequestBody {
     @NotEmpty(message = "The anime name cannot be empty")// pega campos nulos também
     private String name;
