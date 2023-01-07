@@ -5,15 +5,18 @@ import estudo.java.springboot2.requests.AnimePostRequestBody;
 import estudo.java.springboot2.requests.AnimePutRequestBody;
 import estudo.java.springboot2.service.AnimeService;
 import estudo.java.springboot2.util.DateUtil;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 @RestController
@@ -40,6 +43,16 @@ public class AnimeController {
     public ResponseEntity<Anime> findById(@PathVariable long id){
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
     }
+
+    @GetMapping(path = "by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Anime> findByIdAutheticationPrincipal(@PathVariable long id,
+                                                                @AuthenticationPrincipal UserDetails userDetails){
+
+        log.info("UserDatails => '{}'",userDetails);
+        return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
+    }
+
     @GetMapping(path = "/find")
     public ResponseEntity< List<Anime> > findByName(@RequestParam String name){//(@RequestParam(name = "name") String name) Não é mais obrigatório declarar o nome do campo que sera acessado na url, pois o spring pega de acordo com o nome da váriavel do parametro.
         return ResponseEntity.ok(animeService.findByName(name));
@@ -48,6 +61,7 @@ public class AnimeController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     // @ResponseStatus(HttpStatus.CREATED) // Outra forma de retorna o CODIGO de um resposta
     public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody){
         return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);

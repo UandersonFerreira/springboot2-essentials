@@ -7,7 +7,6 @@ import estudo.java.springboot2.exception.ValidationExceptionDetails;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
@@ -40,7 +39,7 @@ public class BadRequesthandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+            MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         final List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         final String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
@@ -66,7 +65,7 @@ public class BadRequesthandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
-       Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+       Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus statusCode, WebRequest request) {
 
          ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(LocalDateTime.now())
@@ -75,7 +74,7 @@ public class BadRequesthandler extends ResponseEntityExceptionHandler {
                 .details(ex.getMessage())
                 .developerMessage(ex.getClass().getName())
                 .build();
-        return createResponseEntity(exceptionDetails, headers, statusCode, request);
+        return new ResponseEntity<>(exceptionDetails, headers, statusCode);
         /*
         Sobreescrevendo um tratamento de erro padrão da class ResponseEntityExceptionHandler
         do spring para um personalizada.
