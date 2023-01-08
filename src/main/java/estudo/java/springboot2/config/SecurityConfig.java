@@ -45,12 +45,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
 //                csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .authorizeRequests()
+                .antMatchers("/animes/admin/**").hasRole("ADMIN")//A Ordem de declaração é importante
+                .antMatchers("/animes/**").hasRole("USER")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .and()
                 .httpBasic();
+        /*
+                     PROTEÇÃO DE URL COM ANTMATCHER
+
+        Se numa aplicação os endpoints(url's) possuem um padrão consistente
+        é possível realizar o filtro de acesso por meio dos antMatchers.
+        Ex:
+
+        save - /animes
+        delete - /animes/admin
+        update - /animes
+        find -  /animes
+
+        OBSERVAÇÃO: A ORDEM DE DECLARAÇÃO É IMPORTANTE!!
+         - A role, que for mais RESTRITIVA deve vim Primeiro.
+
+
+
+
+        */
     }
 
 
