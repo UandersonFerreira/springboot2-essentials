@@ -5,8 +5,10 @@ import estudo.java.springboot2.requests.AnimePostRequestBody;
 import estudo.java.springboot2.requests.AnimePutRequestBody;
 import estudo.java.springboot2.service.AnimeService;
 import estudo.java.springboot2.util.DateUtil;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,9 +31,27 @@ public class AnimeController {
     private  final AnimeService animeService;
 
     @GetMapping()
-    public ResponseEntity<Page<Anime>> list(Pageable pageable){
+    public ResponseEntity<Page<Anime>> list(@ParameterObject Pageable pageable){
         log.info(dateUtil.formatLocalDateTimeToDateDabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(animeService.listAll(pageable), HttpStatus.OK);//ou ResponseEntity.ok(animeService.listAll());
+    /*
+        public ResponseEntity<Page<Anime>> list(@Parameter(hidden = true) Pageable pageable){
+        }
+
+    //@Parameter(hidden = true)@Parameter(hidden = true):
+    - Faz comq que o Pageable não seja um parametro obrigatório ao
+    realizar uma requisição neste endpoint(Oculta ele)
+
+    @ParameterObject - para quando você estiver usando um objeto(Pageable/Anime) para capturar
+     vários params de consulta/requisição de solicitação, que serão passados pela url.
+     ex: size, sort,page
+      - http://localhost:8080/animes?page=0&size=2
+
+     -> Em outras palavras, disponibiliza o acesso aos  filtros
+      do PageableHandlerMethodArgumentResolver, criados no
+      method addArgumentResolvers() da Nossa class DevDojoWebMvcConfigure.
+
+     */
     }
     @GetMapping(path = "/all")
     public ResponseEntity<List<Anime>> listAll( ){
