@@ -2,7 +2,7 @@ package estudo.java.springboot2.repository;
 
 import estudo.java.springboot2.domain.Anime;
 import estudo.java.springboot2.util.AnimeCreated;
-import jakarta.validation.ConstraintViolationException;
+import javax.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
